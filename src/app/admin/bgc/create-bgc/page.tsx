@@ -5,7 +5,6 @@ import AdminHeader from "@/components/admin/admin-header";
 // import BgcTable from "./bgc-table";
 import BreadCrumb from '@/components/breadcrumb';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FormList } from "./FormList";
 import FormGenerator from "./FormGenerator";
 
 

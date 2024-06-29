@@ -91,60 +91,60 @@ export async function GET(request: Request) {
 }
 
 
-export async function GET_BY_ID(request: Request) {
-    await dbConnect();
+// export async function GET_BY_ID(request: Request) {
+//     await dbConnect();
 
-    try {
-        const { id } = await request.json();
+//     try {
+//         const { id } = await request.json();
 
-        // Find the plan by its ID
-        const plan = await PlanModel.findById(id);
+//         // Find the plan by its ID
+//         const plan = await PlanModel.findById(id);
 
-        // If the plan doesn't exist, return an error response
-        if (!plan) {
-            return new Response(
-                JSON.stringify({
-                    success: false,
-                    message: "Plan not found"
-                }),
-                {
-                    status: 404,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-        }
+//         // If the plan doesn't exist, return an error response
+//         if (!plan) {
+//             return new Response(
+//                 JSON.stringify({
+//                     success: false,
+//                     message: "Plan not found"
+//                 }),
+//                 {
+//                     status: 404,
+//                     headers: {
+//                         'Content-Type': 'application/json'
+//                     }
+//                 }
+//             );
+//         }
 
-        // Return the found plan
-        return new Response(
-            JSON.stringify({
-                success: true,
-                data: plan
-            }),
-            {
-                status: 200,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-    } catch (error) {
-        console.error('Error fetching plan by ID', error);
-        return new Response(
-            JSON.stringify({
-                success: false,
-                message: "Error fetching plan by ID"
-            }),
-            {
-                status: 500,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-    }
-}
+//         // Return the found plan
+//         return new Response(
+//             JSON.stringify({
+//                 success: true,
+//                 data: plan
+//             }),
+//             {
+//                 status: 200,
+//                 headers: {
+//                     'Content-Type': 'application/json'
+//                 }
+//             }
+//         );
+//     } catch (error) {
+//         console.error('Error fetching plan by ID', error);
+//         return new Response(
+//             JSON.stringify({
+//                 success: false,
+//                 message: "Error fetching plan by ID"
+//             }),
+//             {
+//                 status: 500,
+//                 headers: {
+//                     'Content-Type': 'application/json'
+//                 }
+//             }
+//         );
+//     }
+// }
 
 
 
