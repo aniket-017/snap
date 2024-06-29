@@ -5,7 +5,7 @@ export async function POST(request: Request){
     await dbConnect()
 
     try {
-       const {planName,planPrice,products}= await request.json()
+       const {planName,company,planPrice,products, status}= await request.json()
        const existingPlan= await PlanModel.findOne({
         planName
        })
@@ -23,8 +23,10 @@ export async function POST(request: Request){
        }else{
         const newPlan =new PlanModel({
             planName: planName,
+            company:company,
             planPrice:planPrice,
-            products:products
+            products:products,
+            status:status
         })
 
         await newPlan.save()
@@ -77,6 +79,62 @@ export async function GET(request: Request) {
             JSON.stringify({
                 success: false,
                 message: "Error fetching plans"
+            }),
+            {
+                status: 500,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+    }
+}
+
+
+export async function GET_BY_ID(request: Request) {
+    await dbConnect();
+
+    try {
+        const { id } = await request.json();
+
+        // Find the plan by its ID
+        const plan = await PlanModel.findById(id);
+
+        // If the plan doesn't exist, return an error response
+        if (!plan) {
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    message: "Plan not found"
+                }),
+                {
+                    status: 404,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+        }
+
+        // Return the found plan
+        return new Response(
+            JSON.stringify({
+                success: true,
+                data: plan
+            }),
+            {
+                status: 200,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+    } catch (error) {
+        console.error('Error fetching plan by ID', error);
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: "Error fetching plan by ID"
             }),
             {
                 status: 500,

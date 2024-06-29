@@ -57,7 +57,10 @@ export function CreateInternalForm() {
     defaultValues: {
       fullName: "",
       email: "",
-      companyName: "",
+      role:"",
+      planAccess:[],
+      reportAccess:"",
+      companyName: "Snapcheck",
     },
   });
 
@@ -85,7 +88,7 @@ export function CreateInternalForm() {
   }, []);
 
   const handleSubmit = async (values: z.infer<typeof internalFormSchema>) => {
-    console.log({ values });
+    console.log("Values:",{ values });
     try {
       const planIds = values.planAccess.map(item => item.value);
       const response = await fetch('/api/hr', {
@@ -266,8 +269,8 @@ export function CreateInternalForm() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="true">View</SelectItem>
-                              <SelectItem value="false">View & Download</SelectItem>
+                              <SelectItem value="view">View</SelectItem>
+                              <SelectItem value="view and download">View & Download</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />

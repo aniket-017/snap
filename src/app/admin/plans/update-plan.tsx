@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,25 +32,127 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector';
+import { Plan } from "@/constants/plandata";
 
 interface UpdatePlanSheetProps {
+  updateData:Plan;
   isOpen: boolean;
   onClose: () => void;
 }
 
+const fetchData = async (endpoint: string) => {
+  const response = await fetch(endpoint);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${endpoint}`);
+  }
+  return response.json();
+};
+
 export function UpdatePlanSheet({
+  updateData,
   isOpen,
   onClose,
 }: UpdatePlanSheetProps) {
   const form = useForm<z.infer<typeof planSchema>>({
     resolver: zodResolver(planSchema),
     defaultValues: {
-     
+      _id:"",
+      planName: "",
+      company: "",
+      products: [],
+      status:  "",
+      planPrice:0,
       
     },
   });
+
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [companies, setcompanies] = useState([]);
   const [options, setOptions] = useState<Option[]>([]);
-  function onSubmit(data: z.infer<typeof planSchema>) {
+  useEffect(() => {
+    
+      const fetchPlansAndProducts = async () => {
+        try {
+          const plansData = await fetchData(`/api/plan?id=${updateData._id}`);
+          const companyData = await fetchData('/api/customer');
+          const productsData = await fetchData('/api/item');
+          const productOptions = productsData.data.map((product: { productName: string, _id: string }) => ({
+            label: product.productName,
+            value: product._id,
+        }));
+          setcompanies(companyData.data);
+          setOptions(productOptions);
+          
+          console.log("updateData:",updateData);
+          setPlans(plansData.data);
+          console.log("Plan:",plansData.data);
+          const planToUpdate: Plan = plansData.data[0]; // Adjust according to your API response structure
+          const productOption: Option[] = updateData.products.map(productId => {
+            // Find corresponding product in productOptions and map to Option
+            const foundProduct = productOptions.find((option: { label:string,value: string; }) => option.value === productId);
+            return foundProduct ? foundProduct : { value: productId, label: 'Unknown Product' };
+          });
+          const company= companyData.data.find((option:{name:string})=> option.name === updateData.company)
+          if(form.control._defaultValues._id == "" ){
+          form.reset({
+            _id: updateData._id,
+            planName: updateData.planName,
+            company: company?company._id:"unknown",
+            products: productOption,
+            status: updateData.status,
+            planPrice: updateData.planPrice,
+          });
+        }
+          
+        } catch (err) {
+          console.error('Error fetching data:', err);
+        }
+      };
+      fetchPlansAndProducts();
+  }, [isOpen, updateData, form]);
+  
+  async function onSubmit(data: z.infer<typeof planSchema>) {
+    console.log("update:", data);
+    
+    try {
+      const updatedPlanData = {
+        ...updateData,
+        id:data._id,
+        planName: data.planName,
+        company: data.company,
+        planPrice: data.planPrice,
+        status: data.status,
+        products:data.products.map(option => option.value)
+    };
+    console.log("updatedPlanData",updatedPlanData);
+    
+    fetch(`/api/plan`, {
+      method: 'PUT',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedPlanData),
+  })
+  .then(response => response.json())
+  .then(data => {
+      console.log('Plan updated:', data);
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(updatedPlanData, null, 2)}</code>
+          </pre>
+        ),
+      });
+      onClose();
+  })
+  .catch(error => {
+      console.error('Error updating Plan:', error);
+      // You can add logic to handle error response
+  });
+    } catch (error) {
+      console.error('Error updating plan:', error);
+    }
     toast({
       title: "You submitted the following values:",
       description: (
@@ -80,7 +182,7 @@ export function UpdatePlanSheet({
             >
                      <FormField
               control={form.control}
-              name="plan"
+              name="planName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Plan name</FormLabel>
@@ -97,7 +199,7 @@ export function UpdatePlanSheet({
 
 <FormField
           control={form.control}
-          name="companyName"
+          name="company"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Company </FormLabel>
@@ -108,8 +210,11 @@ export function UpdatePlanSheet({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="company">Company 1</SelectItem>
-                  <SelectItem value="external">Company 2</SelectItem>
+                {companies.map((company:{_id:string,name:string,email:string, contract_id:string, cost_rate:number}) => (
+                                        <SelectItem key={company._id} value={company._id}>
+                                            {company.name}
+                                        </SelectItem>
+                                    ))}
                 
                 </SelectContent>
               </Select>
@@ -123,7 +228,7 @@ export function UpdatePlanSheet({
             
             <FormField
           control={form.control}
-          name="items"
+          name="products"
           render={({ field }) => (
             <FormItem>
               <FormLabel>BGC</FormLabel>
@@ -149,7 +254,7 @@ export function UpdatePlanSheet({
 
             <FormField
               control={form.control}
-              name="price"
+              name="planPrice"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Price</FormLabel>

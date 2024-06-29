@@ -30,16 +30,19 @@ export function CreatePlan() {
     const form = useForm<z.infer<typeof planSchema>>({
         resolver: zodResolver(planSchema),
         defaultValues: {
-          plan: "",
-          companyName: "",
+          _id:"",
+          planName: "",
+          company: "",
           status: "",
-          price: 0,
+          products:[],
+          planPrice: 0,
         },
       });
       const router = useRouter();
       const [options, setOptions] = useState<Option[]>([]);
       const [loading, setLoading] = useState(true);
       const [error, setError] = useState<string | null>(null);
+      const [companies, setCompanies] = useState([]);
       useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -61,26 +64,45 @@ export function CreatePlan() {
         };
 
         fetchProducts();
+        const fetchCustomers = async () => {
+          try {
+            const response = await fetch('/api/customer');
+            if (!response.ok) {
+              throw new Error(`Failed to fetching customers`);
+            }
+            const data=await response.json();
+            console.log("Response data:",data.data[0]);
+            
+            setCompanies(data.data);
+          } catch (err) {
+            console.error('Error fetching data:', err);
+          }
+        };
+    
+        fetchCustomers();
     }, []);
 
       async function onSubmit(values: z.infer<typeof planSchema>) {
         
-        console.log(values);
+        console.log("submit:",values);
         try {
-          const productIds = values.items.map(item => item.value);
+          const productIds = values.products.map(item => item.value);
           const response = await fetch('/api/plan', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                  planName: values.plan,
-                  planPrice: values.price,
+                  planName: values.planName,
+                  company: values.company,
+                  planPrice: values.planPrice,
                   products: productIds,
+                  status:values.status
               }),
           });
 
           const data = await response.json();
+          console.log("Created");
           if (!response.ok) {
               throw new Error(data.message || 'Failed to create plan');
           }
@@ -102,7 +124,7 @@ export function CreatePlan() {
             
             <FormField
               control={form.control}
-              name="plan"
+              name="planName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Plan name</FormLabel>
@@ -117,7 +139,7 @@ export function CreatePlan() {
 
 <FormField
           control={form.control}
-          name="companyName"
+          name="company"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Company </FormLabel>
@@ -128,8 +150,11 @@ export function CreatePlan() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="company">Company 1</SelectItem>
-                  <SelectItem value="external">Company 2</SelectItem>
+                {companies.map((company:{_id:string,name:string,email:string, contract_id:string, cost_rate:number}) => (
+                                        <SelectItem key={company._id} value={company._id}>
+                                            {company.name}
+                                        </SelectItem>
+                                    ))}
                 
                 </SelectContent>
               </Select>
@@ -146,7 +171,7 @@ export function CreatePlan() {
             
             <FormField
           control={form.control}
-          name="items"
+          name="products"
           render={({ field }) => (
             <FormItem>
               <FormLabel>BGC</FormLabel>
@@ -172,7 +197,7 @@ export function CreatePlan() {
 
             <FormField
               control={form.control}
-              name="price"
+              name="planPrice"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Price</FormLabel>

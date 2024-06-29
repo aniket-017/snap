@@ -8,7 +8,7 @@ export interface Hr extends Document {
     company:string;
     password: string;
     plan: mongoose.Schema.Types.ObjectId[]; // Foreign key to Plan
-    report_access: boolean;
+    report_access: string;
 }
 
 const HrSchema: Schema<Hr> = new Schema({
@@ -23,7 +23,12 @@ const HrSchema: Schema<Hr> = new Schema({
     company: { type: String, required: [true,"Company name is required"] },
     password: { type: String, required: [true,"Password is required"] },
     plan: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Plan', required: true }], // Foreign key to Plan
-    report_access: { type: Boolean, required: true, default: false }
+    report_access: {
+        type: String,
+        required: true,
+        enum: ['view', 'view and download'], // Specify enum values for report_access
+        default: 'view', // Default value if not specified
+    },
 },
 {
     timestamps:true

@@ -12,7 +12,7 @@ interface ProductsClientProps {
 export const UsersClient: React.FC<ProductsClientProps> = ({ data }) => {
   return (
     <>
-      <DataTable searchKey='user' columns={columns} data={data} />
+      <DataTable searchKey='name' columns={columns} data={data} />
     </>
   );
 };

@@ -1,117 +1,147 @@
-export type Plan = {
-    id: number;
-    plan: string;
-    companyName: string;
-    status: string;
-    created: string;
+export interface Plan {
+  _id: string;
+  planName: string;
+  company: string;
+  planPrice: number;
+  products: string[];
+  status: string;
+  createdAt: Date;
+}
 
-  };
-  export const plans: Plan[] = [
-    {
-      "id": 1,
-      "plan": "Basic",
-      "companyName": "Acme Inc.",
-      "status": "Active",
-      "created": "2023-04-15"
-    },
-    {
-      "id": 2,
-      "plan": "Pro",
-      "companyName": "Globex Corporation",
-      "status": "Inactive",
-      "created": "2023-05-01"
-    },
-    {
-      "id": 3,
-      "plan": "Enterprise",
-      "companyName": "Wayne Enterprises",
-      "status": "Active",
-      "created": "2022-11-20"
-    },
-    {
-      "id": 4,
-      "plan": "Basic",
-      "companyName": "Stark Industries",
-      "status": "Inactive",
-      "created": "2023-03-10"
-    },
-    {
-      "id": 5,
-      "plan": "Pro",
-      "companyName": "Umbrella Corporation",
-      "status": "Active",
-      "created": "2023-06-01"
-    },{
-      "id": 1,
-      "plan": "Basic",
-      "companyName": "Acme Inc.",
-      "status": "Active",
-      "created": "2023-04-15"
-    },
-    {
-      "id": 2,
-      "plan": "Pro",
-      "companyName": "Globex Corporation",
-      "status": "Inactive",
-      "created": "2023-05-01"
-    },
-    {
-      "id": 3,
-      "plan": "Enterprise",
-      "companyName": "Wayne Enterprises",
-      "status": "Active",
-      "created": "2022-11-20"
-    },
-    {
-      "id": 4,
-      "plan": "Basic",
-      "companyName": "Stark Industries",
-      "status": "Inactive",
-      "created": "2023-03-10"
-    },
-    {
-      "id": 5,
-      "plan": "Pro",
-      "companyName": "Umbrella Corporation",
-      "status": "Active",
-      "created": "2023-06-01"
-    },{
-      "id": 1,
-      "plan": "Basic",
-      "companyName": "Acme Inc.",
-      "status": "Active",
-      "created": "2023-04-15"
-    },
-    {
-      "id": 2,
-      "plan": "Pro",
-      "companyName": "Globex Corporation",
-      "status": "Inactive",
-      "created": "2023-05-01"
-    },
-    {
-      "id": 3,
-      "plan": "Enterprise",
-      "companyName": "Wayne Enterprises",
-      "status": "Active",
-      "created": "2022-11-20"
-    },
-    {
-      "id": 4,
-      "plan": "Basic",
-      "companyName": "Stark Industries",
-      "status": "Inactive",
-      "created": "2023-03-10"
-    },
-    {
-      "id": 5,
-      "plan": "Pro",
-      "companyName": "Umbrella Corporation",
-      "status": "Active",
-      "created": "2023-06-01"
-    }
-  ]
- 
-  
-  
-  
+export const plans: Plan[] = [
+  {
+    _id: "1",
+    planName: "Basic",
+    company: "Acme Inc.",
+    planPrice: 19.99,
+    products: ["product1", "product2"],
+    status: "active",
+    createdAt: new Date("2023-04-15"),
+  },
+  {
+    _id: "2",
+    planName: "Pro",
+    company: "Globex Corporation",
+    planPrice: 29.99,
+    products: ["product3", "product4"],
+    status: "inactive",
+    createdAt: new Date("2023-05-01"),
+  },
+  {
+    _id: "3",
+    planName: "Enterprise",
+    company: "Wayne Enterprises",
+    planPrice: 49.99,
+    products: ["product5", "product6"],
+    status: "active",
+    createdAt: new Date("2022-11-20"),
+  },
+  {
+    _id: "4",
+    planName: "Basic",
+    company: "Stark Industries",
+    planPrice: 19.99,
+    products: ["product7", "product8"],
+    status: "inactive",
+    createdAt: new Date("2023-03-10"),
+  },
+  {
+    _id: "5",
+    planName: "Pro",
+    company: "Umbrella Corporation",
+    planPrice: 29.99,
+    products: ["product9", "product10"],
+    status: "active",
+    createdAt: new Date("2023-06-01"),
+  },
+  {
+    _id: "6",
+    planName: "Basic",
+    company: "Acme Inc.",
+    planPrice: 19.99,
+    products: ["product1", "product2"],
+    status: "active",
+    createdAt: new Date("2023-04-15"),
+  },
+  {
+    _id: "7",
+    planName: "Pro",
+    company: "Globex Corporation",
+    planPrice: 29.99,
+    products: ["product3", "product4"],
+    status: "inactive",
+    createdAt: new Date("2023-05-01"),
+  },
+  {
+    _id: "8",
+    planName: "Enterprise",
+    company: "Wayne Enterprises",
+    planPrice: 49.99,
+    products: ["product5", "product6"],
+    status: "active",
+    createdAt: new Date("2022-11-20"),
+  },
+  {
+    _id: "9",
+    planName: "Basic",
+    company: "Stark Industries",
+    planPrice: 19.99,
+    products: ["product7", "product8"],
+    status: "inactive",
+    createdAt: new Date("2023-03-10"),
+  },
+  {
+    _id: "10",
+    planName: "Pro",
+    company: "Umbrella Corporation",
+    planPrice: 29.99,
+    products: ["product9", "product10"],
+    status: "active",
+    createdAt: new Date("2023-06-01"),
+  },
+  {
+    _id: "11",
+    planName: "Basic",
+    company: "Acme Inc.",
+    planPrice: 19.99,
+    products: ["product1", "product2"],
+    status: "active",
+    createdAt: new Date("2023-04-15"),
+  },
+  {
+    _id: "12",
+    planName: "Pro",
+    company: "Globex Corporation",
+    planPrice: 29.99,
+    products: ["product3", "product4"],
+    status: "inactive",
+    createdAt: new Date("2023-05-01"),
+  },
+  {
+    _id: "13",
+    planName: "Enterprise",
+    company: "Wayne Enterprises",
+    planPrice: 49.99,
+    products: ["product5", "product6"],
+    status: "active",
+    createdAt: new Date("2022-11-20"),
+  },
+  {
+    _id: "14",
+    planName: "Basic",
+    company: "Stark Industries",
+    planPrice: 19.99,
+    products: ["product7", "product8"],
+    status: "inactive",
+    createdAt: new Date("2023-03-10"),
+  },
+  {
+    _id: "15",
+    planName: "Pro",
+    company: "Umbrella Corporation",
+    planPrice: 29.99,
+    products: ["product9", "product10"],
+    status: "active",
+    createdAt: new Date("2023-06-01"),
+  },
+];

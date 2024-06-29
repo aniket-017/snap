@@ -11,7 +11,7 @@ interface ProductsClientProps {
 export const PlanClient: React.FC<ProductsClientProps> = ({ data }) => {
   return (
     <>
-      <DataTable searchKey='plan' columns={columns} data={data} />
+      <DataTable searchKey='planName' columns={columns} data={data} />
     </>
   );
 };

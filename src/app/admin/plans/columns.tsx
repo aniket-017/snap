@@ -26,12 +26,12 @@ export const columns: ColumnDef<Plan>[] = [
     enableHiding: false
   },
   {
-    accessorKey: 'plan',
+    accessorKey: 'planName',
     header: 'PLAN'
     
   },
   {
-    accessorKey: 'companyName',
+    accessorKey: 'company',
     header: 'COMPANY NAME'
     
   },
@@ -40,7 +40,7 @@ export const columns: ColumnDef<Plan>[] = [
     header: 'STATUS'
   },
   {
-    accessorKey: 'created',
+    accessorKey: 'createdAt',
     header: 'CREATED AT'
   },
   {

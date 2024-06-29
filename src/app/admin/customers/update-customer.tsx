@@ -49,7 +49,10 @@ export function UpdateCustomerSheet({
 
   useEffect(() => {
     if (isOpen) {
-      form.reset(updateData); 
+      if(form.control._defaultValues._id == "" ){
+        form.reset(updateData);
+      }
+       
     }
   }, [isOpen, updateData, form]);
 

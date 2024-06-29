@@ -1,13 +1,14 @@
+"use client"
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreateInternalForm } from "./create-internalhr";
 import { useEffect, useState } from "react";
 import BreadCrumb from '@/components/breadcrumb';
-import { users } from "@/constants/userdata";
-import { UsersClient } from "./client";
+
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { PlusCircle } from "lucide-react";
 
 
 const fetchData = async (endpoint: string) => {
@@ -18,7 +19,7 @@ const fetchData = async (endpoint: string) => {
   return response.json();
 };
 
-export default function InternalTable() {
+export default function BgcTable() {
   const router = useRouter();
   const [HRs, setHRs] = useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -54,10 +55,32 @@ export default function InternalTable() {
     setIsUpdateOpen(true);
   };
 
-  
+  const handleDeleteClick = async (hrId: string) => {
+    if (confirm('Are you sure you want to delete this HR?')) {
+      try {
+        const id ={id:hrId};
+        const response = await fetch(`/api/hr/`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(id),
+        });
+        if (response.ok) {
+          setHRs(HRs.filter((hr:{_id:string}) => hr._id !== hrId));
+          alert('HR deleted successfully');
+        } else {
+          alert('Failed to delete HR');
+        }
+      } catch (error) {
+        console.error('Error deleting HR:', error);
+        alert('Failed to delete users');
+      }
+    }
+  };
 
   const breadcrumbItems = [
-    { title: 'Users', link: '/admin/users' },
+    { title: 'Bgc', link: '/admin/bgc' },
     // { title: 'Create', link: '/dashboard/user/create' }
   ];
 
@@ -70,19 +93,24 @@ export default function InternalTable() {
             <TabsTrigger value="all">All</TabsTrigger>
           </TabsList>
           <div className="ml-auto flex items-center gap-2">
-            <CreateInternalForm />
+          <Button size="sm" className="h-7 gap-1" onClick={() => router.push('/admin/bgc/create-bgc')}>
+  <PlusCircle className="h-3.5 w-3.5" />
+  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+    Create sub order
+  </span>
+</Button>
           </div>
         </div>
         <TabsContent value="all">
           <Card x-chunk="dashboard-06-chunk-0">
             <CardHeader>
-              <CardTitle>Users</CardTitle>
-              <CardDescription>Manage your Users and view their details</CardDescription>
+              <CardTitle>BGC</CardTitle>
+              <CardDescription>Manage your BGC and view their details</CardDescription>
             </CardHeader>
             <CardContent>
             <ScrollArea className="   ">
               <div className="px-1 w-[300px] sm:w-full  py-1">
-              < UsersClient data={HRs} />
+              {/* < UsersClient data={users} /> */}
               </div>
               <ScrollBar orientation="horizontal" />
     </ScrollArea>

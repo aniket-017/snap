@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,26 +33,124 @@ import {
 } from "@/components/ui/select";
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector';
 import { internalFormSchema } from "@/schemas/internalFormSchema";
+import { User } from "@/constants/userdata";
 
 interface UpdateUserSheetProps {
   isOpen: boolean;
   onClose: () => void;
+  updateData:User;
 }
+const fetchData = async (endpoint: string) => {
+  const response = await fetch(endpoint);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${endpoint}`);
+  }
+  return response.json();
+};
 
 export function UpdateUserSheet({
+  updateData,
   isOpen,
   onClose,
 }: UpdateUserSheetProps ) {
   const form = useForm<z.infer<typeof internalFormSchema>>({
     resolver: zodResolver(internalFormSchema),
     defaultValues: {
-     
+    _id:"",
+     fullName:"",
+     email:"",
+     role:"",
+     companyName:"",
+     planAccess:[],
+     reportAccess:"",
       
     },
   });
   const [options, setOptions] = useState<Option[]>([]);
   const [organizationAccess, setOrganizationAccess] = useState<string>('internal');
+
+  useEffect(() => {
+    console.log("updateData",updateData);
+    const fetchPlansAndProducts = async () => {
+      try {
+        const plansData = await fetchData('/api/plan');
+        const planOptions = plansData.data.map((plan: { planName: string, _id: string }) => ({
+          label: plan.planName,
+          value: plan._id,
+      }));
+        
+        setOptions(planOptions);
+        
+        // Adjust according to your API response structure
+        const planOption: Option[] = updateData.plan.map(productId => {
+          // Find corresponding product in productOptions and map to Option
+          const foundPlan = planOptions.find((option: { label:string,value: string; }) => option.value === productId);
+          return foundPlan ? foundPlan : { value: productId, label: 'Unknown Product' };
+        });
+        console.log("planOption",planOption);
+        
+        if(form.control._defaultValues._id == "" ){
+          form.reset({
+            _id: updateData._id,
+            fullName: updateData.name,
+            companyName: updateData.company?updateData.company:"unknown",
+            role:updateData.role,
+            planAccess: planOption,
+            email: updateData.email,
+            reportAccess:updateData.report_access
+          });
+        }
+        
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      }
+    };
+    fetchPlansAndProducts();
+  }, []);
+  
   function onSubmit(data: z.infer<typeof internalFormSchema>) {
+    console.log("data",data);
+    
+    try {
+      const updatedUserData = {
+        ...updateData,
+        id:data._id,
+        name: data.fullName,
+        company: data.companyName,
+        email: data.email,
+        role: data.role,
+        report_access:data.reportAccess,
+        plan: data.planAccess.map(option => option.value)
+    };
+    console.log("updatedUserData",updatedUserData);
+    
+    fetch(`/api/hr`, {
+      method: 'PUT',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedUserData),
+  })
+  .then(response => response.json())
+  .then(data => {
+      console.log('User updated:', data);
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(updatedUserData, null, 2)}</code>
+          </pre>
+        ),
+      });
+      onClose();
+  })
+  .catch(error => {
+      console.error('Error updating User:', error);
+      // You can add logic to handle error response
+  });
+    } catch (error) {
+      console.error('Error updating User:', error);
+    }
     toast({
       title: "You submitted the following values:",
       description: (
@@ -150,7 +248,7 @@ export function UpdateUserSheet({
                       )}
                     />
 
-                    {organizationAccess === 'external' && (
+                    {form.control._defaultValues.role === 'external' && (
                       <FormField
                         control={form.control}
                         name="companyName"
@@ -210,8 +308,8 @@ export function UpdateUserSheet({
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="true">View</SelectItem>
-                              <SelectItem value="false">View & Download</SelectItem>
+                              <SelectItem value="view">View</SelectItem>
+                              <SelectItem value="view and download">View & Download</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />

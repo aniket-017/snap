@@ -24,88 +24,68 @@ import { UpdatePlanSheet } from "./update-plan";
 import BreadCrumb from "@/components/breadcrumb";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { PlanClient} from "./client";
-import { plans } from "@/constants/plandata";
 import { PlanRequestClient } from "./client.-request";
 import { request } from "http";
 import { requests } from "@/constants/planrequest";
+import { useRouter } from "next/navigation";
+import { Plan } from "@/constants/plandata";
 
 // Function to fetch data from API
-// const fetchData = async (endpoint: string) => {
-//   const response = await fetch(endpoint);
-//   if (!response.ok) {
-//     throw new Error(`Failed to fetch ${endpoint}`);
-//   }
-//   return response.json();
-// };
+const fetchData = async (endpoint: string) => {
+  const response = await fetch(endpoint);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${endpoint}`);
+  }
+  return response.json();
+};
 
 export default function PlansTable() {
-  // const router = useRouter();
-  // const [plans, setPlans] = useState([]);
-  // const [products, setProducts] = useState([]);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 7;
+  const router = useRouter();
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [companies, setcompanies] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 7;
 
-  // useEffect(() => {
-  //   const fetchPlansAndProducts = async () => {
-  //     try {
-  //       const plansData = await fetchData('/api/plan');
-  //       const productsData = await fetchData('/api/item');
-  //       setPlans(plansData.data);
-  //       setProducts(productsData.data);
-  //     } catch (err) {
-  //       console.error('Error fetching data:', err);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchPlansAndProducts = async () => {
+      try {
+        const plansData = await fetchData('/api/plan');
+        const productsData = await fetchData('/api/customer');
+        
+        setcompanies(productsData.data);
+        const updatedPlans = plansData.data.map((plan:any) => ({
+          ...plan,
+          company: productsData.data.find((company:any) => company._id === plan.company)?.name || "Unknown Company",
+        }));
+        console.log(productsData);
+        setPlans(updatedPlans);
+        
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      }
+    };
+    fetchPlansAndProducts();
+    
+  }, [plans]);
 
-  //   fetchPlansAndProducts();
-  // }, [plans]);
 
-  // const getProductNames = (productIds: any[]) => {
-  //   return productIds.map(id => {
-  //     const product:any = products.find((product:{ _id: string}) => product._id === id);
-  //     return product ? product.productName : id;
-  //   }).join(", ");
-  // };
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentData = plans.slice(startIndex, endIndex);
 
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const endIndex = startIndex + itemsPerPage;
-  // const currentData = plans.slice(startIndex, endIndex);
+  const handlePageChange = (page: React.SetStateAction<number>) => {
+    setCurrentPage(page);
+  };
 
-  // const handlePageChange = (page: React.SetStateAction<number>) => {
-  //   setCurrentPage(page);
-  // };
-
-  // const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  //   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState(null);
   
-  //   const handleEditClick = (plan:any) => {
-  //     setSelectedPlan(plan);
-  //     setIsEditDialogOpen(true);
-  //   };
+    const handleEditClick = (plan:any) => {
+      setSelectedPlan(plan);
+      setIsEditDialogOpen(true);
+    };
 
-    // const handleDeleteClick = async (planId: string) => {
-    //   if (confirm('Are you sure you want to delete this plan?')) {
-    //     try {
-    //       const id ={id:planId};
-    //       const response = await fetch(`/api/plan/`, {
-    //         method: 'DELETE',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify(id),
-    //       });
-    //       if (response.ok) {
-    //         setPlans(plans.filter((plan:{_id:string}) => plan._id !== planId));
-    //         alert('Plan deleted successfully');
-    //       } else {
-    //         alert('Failed to delete plan');
-    //       }
-    //     } catch (error) {
-    //       console.error('Error deleting plan:', error);
-    //       alert('Failed to delete plan');
-    //     }
-    //   }
-    // };
+   
 
     const breadcrumbItems = [
       { title: 'Plans', link: '/admin/plans' },

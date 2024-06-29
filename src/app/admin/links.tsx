@@ -1,5 +1,5 @@
 import React from 'react';
-import {Building2 , ListPlus, UserPlus, Settings, LayoutDashboard, FolderKanban } from 'lucide-react';
+import {Building2 , ListPlus, UserPlus, Settings, LayoutDashboard, FolderKanban, ShieldCheck } from 'lucide-react';
 
 export const sidebarNavItems = [
   {
@@ -12,11 +12,11 @@ export const sidebarNavItems = [
     href: "/admin/users",
     icon: <UserPlus size={20} />,
   },
-  // {
-  //   title: "External HR",
-  //   href: "/admin/external",
-  //   icon: <ListPlus size={20} />,
-  // },
+  {
+    title: "BGC",
+    href: "/admin/bgc",
+    icon: <ShieldCheck size={20} />,
+  },
   {
     title: "Plan",
     href: "/admin/plans",

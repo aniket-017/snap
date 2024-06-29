@@ -27,7 +27,7 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: false
   },
   {
-    accessorKey: 'user',
+    accessorKey: 'name',
     header: 'USERNAME'
     
   },
@@ -37,11 +37,11 @@ export const columns: ColumnDef<User>[] = [
     
   },
   {
-    accessorKey: 'organization',
+    accessorKey: 'company',
     header:  'ORGANIZATION'
   },
   {
-    accessorKey: 'created',
+    accessorKey: 'createdAt',
     header: 'CREATED AT'
   },
   {

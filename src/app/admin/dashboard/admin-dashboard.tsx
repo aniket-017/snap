@@ -106,7 +106,7 @@ export function AdminDashboard() {
 </h2>
 
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-          <Link href="/admin/internal">
+          <Link href="/admin/users">
             <Card x-chunk="dashboard-01-chunk-3" className="hover:border-primary hover:bg-muted/40">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Users</CardTitle>

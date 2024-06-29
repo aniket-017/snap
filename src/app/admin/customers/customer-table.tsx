@@ -32,7 +32,7 @@ export default function CustomersTable() {
   const [user, setUser] = useState([]);
 
   useEffect(() => {
-      const fetchPlansAndProducts = async () => {
+      const fetchCustomers = async () => {
         try {
           const response = await fetch('/api/customer');
           if (!response.ok) {
@@ -47,8 +47,8 @@ export default function CustomersTable() {
         }
       };
   
-      fetchPlansAndProducts();
-    }, []);
+      fetchCustomers();
+    }, [user]);
 
   const breadcrumbItems = [
     { title: 'Customers', link: '/admin/customers' },

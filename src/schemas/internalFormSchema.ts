@@ -7,6 +7,7 @@ const optionSchema = z.object({
 });
 
 export const internalFormSchema = z.object({
+  _id:z.string(),
   fullName: z.string().min(4, { message: "Invalid Name" }),
   email: z.string().email({ message: "Invalid email address" }),
   role: z.string({  required_error: "Please select a valid option" }),

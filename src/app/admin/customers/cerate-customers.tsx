@@ -16,6 +16,41 @@ import { Input } from "@/components/ui/input"
 import { customerSchema } from "@/schemas/customerSchema"
 import { toast } from "@/components/ui/use-toast"
 import { useRouter } from "next/navigation"
+import mongoose, { Schema } from 'mongoose'
+
+const schemaDefinition = {
+  candidate: { type: mongoose.Schema.Types.ObjectId, ref: 'Candidate', required: true },
+  employerName: { type: String, required: true },
+  employmentPlaceContact: {
+    number: { type: String, required: true },
+    email: { type: String, required: true, match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email'] },
+    fax: { type: String }
+  },
+  address: {
+    type: { type: String, enum: ['Domestic', 'International'], required: true },
+    street: { type: String, required: true },
+    city: { type: String, required: true },
+    stateOrProvince: { type: String },
+    postalCode: { type: String },
+    country: { type: String, required: true }
+  },
+  applicantName: {
+    firstName: { type: String, required: true },
+    middleName: { type: String },
+    lastName: { type: String, required: true }
+  },
+  employmentDates: {
+    startDate: { type: Date, required: true },
+    endDate: { type: Date }
+  },
+  jobDetails: {
+    title: { type: String, required: true },
+    supervisorName: { type: String, required: true },
+    salary: { type: Number, required: true }
+  },
+  reasonForLeaving: { type: String, required: true },
+  apiResponse: { type: Schema.Types.Mixed, default: "not available" }
+};
 export function CreateCustomer() {
   const router = useRouter();
     const form = useForm<z.infer<typeof customerSchema>>({
@@ -45,6 +80,27 @@ export function CreateCustomer() {
           });
 
           const responseData = await response.json();
+
+
+          const response1 = await fetch('/api/create-model', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              modelName: 'EmpVerification', // Name of the model
+              schemaDefinition, // Schema definition
+            }),
+          });
+
+          const data1 = await response.json();
+
+    if (data1.success) {
+      console.log('Model created successfully:', data1.model);
+    } else {
+      console.error('Failed to create model:', data1.error);
+    }
+
           if (!response.ok) {
               throw new Error(responseData.message || 'Failed to create customer');
           }
