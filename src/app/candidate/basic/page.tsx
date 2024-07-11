@@ -550,7 +550,7 @@ function FirstStepForm() {
                   <Input placeholder="DL Country" {...field} />
                 </FormControl>
                 <FormDescription>
-                  Enter your driver's license country.
+                  Enter your driver&apos;s license country.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -566,7 +566,7 @@ function FirstStepForm() {
                   <Input placeholder="DL Number" {...field} />
                 </FormControl>
                 <FormDescription>
-                  Enter your driver's license number.
+                  Enter your driver&apos;s license number.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -582,7 +582,7 @@ function FirstStepForm() {
                   <Input placeholder="DL State" {...field} />
                 </FormControl>
                 <FormDescription>
-                  Enter your driver's license state.
+                  Enter your driver&apos;s license state.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -627,12 +627,12 @@ function FirstStepForm() {
           name="motherMaidenName"
           render={({ field }) => (
             <FormItem className="p-2">
-              <FormLabel>Mother's Maiden Name</FormLabel>
+              <FormLabel>Mothe&apos;s Maiden Name</FormLabel>
               <FormControl>
-                <Input placeholder="Mother's Maiden Name" {...field} />
+                <Input placeholder="Mother&apos;s Maiden Name" {...field} />
               </FormControl>
               <FormDescription>
-                Enter your mother's maiden name.
+                Enter your mother&apos;s maiden name.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -643,12 +643,12 @@ function FirstStepForm() {
           name="mothersFullName"
           render={({ field }) => (
             <FormItem className="p-2">
-              <FormLabel>Mother's Full Name</FormLabel>
+              <FormLabel>Mother&apos;s Full Name</FormLabel>
               <FormControl>
-                <Input placeholder="Mother's Full Name" {...field} />
+                <Input placeholder="Mother&apos;s Full Name" {...field} />
               </FormControl>
               <FormDescription>
-                Enter your mother's full name.
+                Enter your mother&apos;s full name.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -659,12 +659,12 @@ function FirstStepForm() {
           name="fathersName"
           render={({ field }) => (
             <FormItem className="p-2">
-              <FormLabel>Father's Name</FormLabel>
+              <FormLabel>Father&apos;s Name</FormLabel>
               <FormControl>
-                <Input placeholder="Father's Name" {...field} />
+                <Input placeholder="Father&apos;s Name" {...field} />
               </FormControl>
               <FormDescription>
-                Enter your father's name.
+                Enter your father&apos;s name.
               </FormDescription>
               <FormMessage />
             </FormItem>
