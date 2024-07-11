@@ -22,7 +22,7 @@ export default function CreateBgcPage() {
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-4 md:gap-8">
         <BreadCrumb items={breadcrumbItems} />
         <div className="flex gap-6 w-full">
-        {/* <FormList /> */}
+    
         <Tabs defaultValue="editor" className="w-full">
         
           <TabsList className="grid w-1/2 mx-aut grid-cols-2">

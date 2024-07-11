@@ -1,61 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import PlanModel from "@/model/Plan";
 
-export async function POST(request: Request){
-    await dbConnect()
-
-    try {
-       const {planName,company,planPrice,products, status}= await request.json()
-       const existingPlan= await PlanModel.findOne({
-        planName
-       })
-       
-       if (existingPlan) {
-        return Response.json(
-            {
-                success: false,
-                message: "plan already exist"
-            },
-            {
-                status: 400
-            }
-        )  
-       }else{
-        const newPlan =new PlanModel({
-            planName: planName,
-            company:company,
-            planPrice:planPrice,
-            products:products,
-            status:status
-        })
-
-        await newPlan.save()
-        return Response.json(
-            {
-                success: true,
-                message: "Plan created"
-            },
-            {
-                status: 200
-            }
-        )
-       }
-
-
-    } catch (error) {
-        console.error('Error creating Plan',error);
-        return Response.json(
-            {
-                success: false,
-                message: "Error creating Plan"
-            },
-            {
-                status: 500
-            }
-        )
-    }
-}
-
 export async function GET(request: Request) {
     await dbConnect();
 
@@ -89,6 +34,61 @@ export async function GET(request: Request) {
         );
     }
 }
+
+export async function POST(request: Request) {
+    await dbConnect()
+
+    try {
+       const {planName,company,planPrice,products, status}= await request.json()
+       const existingPlan= await PlanModel.findOne({
+        planName
+       })
+       
+       if (existingPlan) {
+        return Response.json(
+            {
+                success: false,
+                message: "plan already exist"
+            },
+            {
+                status: 400
+            }
+        )  
+       } else {
+        const newPlan =new PlanModel({
+            planName: planName,
+            company:company,
+            planPrice:planPrice,
+            products:products,
+            status:status
+        })
+
+        await newPlan.save()
+        return Response.json(
+            {
+                success: true,
+                message: "Plan created"
+            },
+            {
+                status: 200
+            }
+        )
+       }
+    } catch (error) {
+        console.error('Error creating Plan',error);
+        return Response.json(
+            {
+                success: false,
+                message: "Error creating Plan"
+            },
+            {
+                status: 500
+            }
+        )
+    }
+}
+
+
 
 
 // export async function GET_BY_ID(request: Request) {
