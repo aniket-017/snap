@@ -23,7 +23,7 @@ Snapcheck is a background verification app built using Next.js, Shad CN UI, Tail
 Before you begin, ensure you have the following prerequisites installed on your system:
 
 - [Node.js](https://nodejs.org/en/download/) (version 14.x or higher)
-- [npm](https://www.npmjs.com/get-npm) or [yarn](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
+- [npm](https://www.npmjs.com/get-npm) 
 - [MongoDB](https://docs.mongodb.com/manual/installation/)
 
 ## Installation
