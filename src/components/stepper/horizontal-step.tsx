@@ -110,4 +110,7 @@ const HorizontalStep = React.forwardRef<HTMLDivElement, StepSharedProps>(
 	},
 );
 
+// Adding a display name to the component
+HorizontalStep.displayName = "HorizontalStep";
+
 export { HorizontalStep };
