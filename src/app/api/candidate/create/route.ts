@@ -8,7 +8,7 @@ export async function POST(request: Request) {
         const {
             internalHr,
             companyName,
-            plans,
+            plan,
             firstName,
             lastName,
             email,
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
             const newCandidate = new CandidateModel({
                 internalHr,
                 companyName,
-                plans,
+                plan,
                 firstName,
                 lastName,
                 email,
@@ -42,11 +42,12 @@ export async function POST(request: Request) {
             });
 
             // Save the new candidate document to the database
-            await newCandidate.save();
+           const candidate= await newCandidate.save();
 
             return Response.json({
                 success: true,
-                message: "Candidate created"
+                message: "Candidate created",
+                candidate:candidate,
             }, {
                 status: 200
             });

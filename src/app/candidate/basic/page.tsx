@@ -43,7 +43,11 @@ const steps = [{ label: "Step 1" }] satisfies StepItem[];
 
 
 
-export default function StepperFooterInside() {
+export default function StepperFooterInside({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
   return (
     <>
       <div className="flex justify-center ">
@@ -57,7 +61,7 @@ export default function StepperFooterInside() {
             {steps.map((stepProps, index) => {
               return (
                 <Step key={stepProps.label} {...stepProps}>
-                  <FirstStepForm />
+                  <FirstStepForm searchParams={searchParams} />
                 </Step>
               );
             })}
@@ -109,7 +113,11 @@ const FinalStep = () => {
     </>
   );
 };
-function FirstStepForm() {
+function FirstStepForm({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
   const { nextStep } = useStepper();
 
   const form = useForm<z.infer<typeof basicformSchema>>({
@@ -119,7 +127,6 @@ function FirstStepForm() {
       middleName: "",
       lastName: "",
       nametype: "",
-      role: "",
       dob: new Date(),
       passportNumber: "",
       passportType: "",
@@ -154,8 +161,46 @@ function FirstStepForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof basicformSchema>) {
+  async function onSubmit(data: z.infer<typeof basicformSchema>) {
     console.log("Submitting form with data:", data);
+    console.log("user ID",searchParams?.userId);
+    const userId = searchParams?.userId; 
+    const formData = {
+        ...data,
+        candidate: userId
+    };
+    console.log("formData: ", formData);
+    
+
+    try {
+      const response = await fetch('/api/candidate/basic-form', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const result = await response.json();
+      console.log("Form submitted successfully:", result);
+  
+      nextStep();
+      toast({
+        title: "Form submitted successfully!",
+      });
+      
+    } catch (error) {
+      console.error("Failed to submit form:", error);
+      toast({
+        title: "Failed to submit form",
+      });
+    }
+    
+    
     nextStep();
     toast({
       title: "Form submitted Successfully!",
@@ -640,7 +685,7 @@ function FirstStepForm() {
         />
         <FormField
           control={form.control}
-          name="mothersFullName"
+          name="motherFullName"
           render={({ field }) => (
             <FormItem className="p-2">
               <FormLabel>Mother&apos;s Full Name</FormLabel>
@@ -656,7 +701,7 @@ function FirstStepForm() {
         />
         <FormField
           control={form.control}
-          name="fathersName"
+          name="fatherName"
           render={({ field }) => (
             <FormItem className="p-2">
               <FormLabel>Father&apos;s Name</FormLabel>

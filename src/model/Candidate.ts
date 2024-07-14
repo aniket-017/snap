@@ -3,8 +3,8 @@ import mongoose, { Schema, Document } from "mongoose";
 // Define the schema for the Candidate model
 export interface Candidate extends Document {
     internalHr: mongoose.Schema.Types.ObjectId;
-    companyName: string;
-    plans: string;
+    company: mongoose.Schema.Types.ObjectId;
+    plan: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -15,8 +15,8 @@ export interface Candidate extends Document {
 
 const CandidateSchema: Schema<Candidate> = new Schema({
     internalHr: { type: mongoose.Schema.Types.ObjectId, ref: 'Hr' },
-    companyName: { type: String, required: true },
-    plans: { type: String, required: true },
+    company: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
+    plan: { type: String, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { 
