@@ -12,8 +12,8 @@ export async function POST(request: Request) {
             firstName,
             lastName,
             email,
-            contactNumber,
-            ssnId,
+            // contactNumber,
+            // ssnId,
             status
         } = await request.json();
 
@@ -36,8 +36,8 @@ export async function POST(request: Request) {
                 firstName,
                 lastName,
                 email,
-                contactNumber,
-                ssnId,
+                // contactNumber,
+                // ssnId,
                 status
             });
 

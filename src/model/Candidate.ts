@@ -25,8 +25,8 @@ const CandidateSchema: Schema<Candidate> = new Schema({
         unique: true, 
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email'] 
     },
-    contactNumber: { type: String, required: true },
-    ssnId: { type: String, required: true },
+    // contactNumber: { type: String, required: true },
+    // ssnId: { type: String, required: true },
     status: { type: String, default: "created" } 
 },
 {
