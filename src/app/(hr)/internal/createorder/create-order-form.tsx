@@ -206,8 +206,8 @@ export default function CreateOrderForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="basic">Basic</SelectItem>
-                        <SelectItem value="basicfederal">Basic and Federal</SelectItem>
+                        {/* <SelectItem value="basic">Basic</SelectItem> */}
+                        {/* <SelectItem value="basicfederal">Basic and Federal</SelectItem> */}
                         <SelectItem value="A La Carte">A La Carte</SelectItem>
                         <SelectItem value="Standard Test Order">Standard Test Order</SelectItem>
                         <SelectItem value="DT Only Test Package">DT Only Test Package</SelectItem>
