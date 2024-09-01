@@ -208,11 +208,12 @@ export default function CreateOrderForm() {
                       <SelectContent>
                         {/* <SelectItem value="basic">Basic</SelectItem> */}
                         {/* <SelectItem value="basicfederal">Basic and Federal</SelectItem> */}
-                        <SelectItem value="A La Carte">A La Carte</SelectItem>
+                       
                         <SelectItem value="Standard Test Order">Standard Test Order</SelectItem>
                         <SelectItem value="DT Only Test Package">DT Only Test Package</SelectItem>
                         <SelectItem value="MBI Worldwide New Hire Package">MBI Worldwide New Hire Package</SelectItem>
                         <SelectItem value="GA Statewide">GA Statewide</SelectItem>
+                        <SelectItem value="A La Carte">A La Carte</SelectItem>
                         <SelectItem value="invitation">Invitation</SelectItem>
                         <SelectItem value="Test EDD">Test EDD</SelectItem>
                         <SelectItem value="Intl Package">Intl Package</SelectItem>
