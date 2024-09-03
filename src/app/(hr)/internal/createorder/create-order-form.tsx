@@ -85,6 +85,20 @@ export default function CreateOrderForm() {
     };
 
     fetchCustomers();
+    
+    const fetchpackages = async () => {
+      try {
+        const response = await fetch("/api/packages");
+       
+        console.log(response);
+        
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchpackages();
+ 
   }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -206,9 +220,7 @@ export default function CreateOrderForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {/* <SelectItem value="basic">Basic</SelectItem> */}
-                        {/* <SelectItem value="basicfederal">Basic and Federal</SelectItem> */}
-                       
+                      
                         <SelectItem value="Standard Test Order">Standard Test Order</SelectItem>
                         <SelectItem value="DT Only Test Package">DT Only Test Package</SelectItem>
                         <SelectItem value="MBI Worldwide New Hire Package">MBI Worldwide New Hire Package</SelectItem>
