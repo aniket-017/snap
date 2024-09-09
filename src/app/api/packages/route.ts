@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
       }
     );
 
-    console.log(response.data);
+  
     // Parse the XML response to JSON
     const packages: Package[] = await parseXML(response.data);
     console.log("below");

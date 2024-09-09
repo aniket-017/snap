@@ -53,6 +53,7 @@ export default function CreateOrderForm() {
   });
   const router = useRouter();
   const [companies, setCompanies] = useState([]);
+  const [packages, setPackages] = useState([]);
 
   useEffect(() => {
     const getDetails = async () => {
@@ -90,8 +91,16 @@ export default function CreateOrderForm() {
       try {
         const response = await fetch("/api/packages");
        
-        console.log(response);
-        
+        if (!response.ok) {
+          throw new Error("Failed to fetch packages");
+        }
+        const data = await response.json();
+        const packages = data.packages; // Assuming data structure matches { packages: [...] }
+    
+        console.log("Packages:", packages.XML.package);
+        const fetchedPackages = packages.XML.package; 
+        setPackages(fetchedPackages);
+
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -207,47 +216,31 @@ export default function CreateOrderForm() {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="plan"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Select plan</FormLabel>
-                    <Select onValueChange={field.onChange}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a plan" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                      
-                        <SelectItem value="Standard Test Order">Standard Test Order</SelectItem>
-                        <SelectItem value="DT Only Test Package">DT Only Test Package</SelectItem>
-                        <SelectItem value="MBI Worldwide New Hire Package">MBI Worldwide New Hire Package</SelectItem>
-                        <SelectItem value="GA Statewide">GA Statewide</SelectItem>
-                        <SelectItem value="A La Carte">A La Carte</SelectItem>
-                        <SelectItem value="invitation">Invitation</SelectItem>
-                        <SelectItem value="Test EDD">Test EDD</SelectItem>
-                        <SelectItem value="Intl Package">Intl Package</SelectItem>
-                        <SelectItem value="Adverse Action Package">Adverse Action Package</SelectItem>
-                        <SelectItem value="Safety First">Safety First</SelectItem>
-                        <SelectItem value="Corporate Executive Package">Corporate Executive Package</SelectItem>
-                        <SelectItem value="New Hire Application">New Hire Application</SelectItem>
-                        <SelectItem value="Standard CO Unltd">Standard CO Unltd</SelectItem>
-                        <SelectItem value="New Hire Criminal and Drug Screen">
-                          New Hire Criminal and Drug Screen
-                        </SelectItem>
-                        <SelectItem value="Criminal Plus MVR Package">Criminal Plus MVR Package</SelectItem>
-                        <SelectItem value="Traveling HealthCare">Traveling HealthCare</SelectItem>
-                        <SelectItem value="Annual Employee Rescreen">Annual Employee Rescreen</SelectItem>
-                        <SelectItem value="Annual ReScreen Package">Annual ReScreen Package</SelectItem>
-                        <SelectItem value="GA test package">GA test package</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+<FormField
+      control={form.control}
+      name="plan"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Select plan</FormLabel>
+          <Select onValueChange={field.onChange}>
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a plan" />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              {/* Dynamically render SelectItem options based on fetched packages */}
+              {packages.map((pkg, index) => (
+                <SelectItem key={index} value={pkg}>
+                  {pkg}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
 
               <FormField
                 control={form.control}
